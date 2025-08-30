@@ -4,6 +4,8 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     public static T Instance { get; private set; }
 
+    [SerializeField] private bool persistAcrossScenes = true;
+
     /// <summary>
     /// Make sure this is called on override when inheriting this class.
     /// </summary>
@@ -16,6 +18,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
         Instance = this as T;
 
-        DontDestroyOnLoad(gameObject);
+        if(persistAcrossScenes)
+            DontDestroyOnLoad(gameObject);
     }
 }

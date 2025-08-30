@@ -106,18 +106,6 @@ public class InputManager : Singleton<InputManager>, IPlayerActions, IUIActions
         if (context.performed)
             GameManager.Instance.ChangeState(GameState.Playing);
     }
-    public void OnNavigate(InputAction.CallbackContext context)
-    {
-
-    }
-    public void OnSubmit(InputAction.CallbackContext context)
-    {
-
-    }
-    public void OnCancel(InputAction.CallbackContext context)
-    {
-
-    }
     public void OnPoint(InputAction.CallbackContext context)
     {
 
@@ -135,14 +123,6 @@ public class InputManager : Singleton<InputManager>, IPlayerActions, IUIActions
        
     }
     public void OnRightClick(InputAction.CallbackContext context)
-    {
-      
-    }
-    public void OnTrackedDevicePosition(InputAction.CallbackContext context)
-    {
-    
-    }
-    public void OnTrackedDeviceOrientation(InputAction.CallbackContext context)
     {
       
     }

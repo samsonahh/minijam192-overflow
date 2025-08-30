@@ -44,3 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 219259bb9d13d414c8acac35a9359c3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  persistAcrossScenes: 0
