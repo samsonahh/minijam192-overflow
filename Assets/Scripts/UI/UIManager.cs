@@ -20,12 +20,6 @@ public class UIManager : Singleton<UIManager>
         HideAllPanels();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.N))
-            UIManager.Instance.ShowPanel(PanelType.Results);
-    }
-
     public void ShowPanel(PanelType panelType)
     {
         GameObject panel = panels[panelType];
