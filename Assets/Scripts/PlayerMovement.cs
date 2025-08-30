@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         Acceleration();
+        Deacceleration();
     }
 
     private void FixedUpdate()
@@ -34,13 +35,28 @@ public class PlayerMovement : MonoBehaviour
         if (InputManager.Instance.MoveDirection.y != 0f && speed < maxSpeed)
         {
             speed += Time.deltaTime * accelerationSpeed;
-        } else
+        }
+        
+        //else
+        //{
+        //    speed -= Time.deltaTime * accelerationSpeed;
+        //    if (InputManager.Instance.MoveDirection.y == 0f)
+        //    {
+        //        speed = 0f;
+        //    }
+        //}
+    }
+
+    void Deacceleration()
+    {
+        if(InputManager.Instance.MoveDirection.y == 0f)
         {
             speed -= Time.deltaTime * accelerationSpeed;
-            if (InputManager.Instance.MoveDirection.y == 0f)
-            {
-                speed = 0f;
-            }
+        }
+
+        if (speed <= 0f)
+        {
+            speed = 0f;
         }
     }
 }
