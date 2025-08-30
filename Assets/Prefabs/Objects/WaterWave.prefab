@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 8586692474672740646}
   - component: {fileID: 2348795387182806740}
   - component: {fileID: 7560497107197601405}
+  - component: {fileID: 3276330755315956554}
   m_Layer: 0
   m_Name: WaterWave
-  m_TagString: Untagged
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,7 +31,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 25, y: 25, z: 25}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -65,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b8244435df2cb7c408234ec5abdde844, type: 2}
+  - {fileID: 2100000, guid: a483ae67e905a61458568ca1b80fb131, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -107,5 +108,31 @@ MonoBehaviour:
   speed: 0.5
   epicenter: {x: 0, y: 0, z: 0}
   pushRadius: 120
-  pushForce: 1
-  showGizmos: 1
+  pushForce: 2
+  showGizmos: 0
+  pulseAmplitude: 1
+  pulseSpeed: 5
+  pulseWidth: 1
+  pulseImpulseForce: 200
+  pulseDuration: 1.5
+--- !u!65 &3276330755315956554
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3035276339882318566}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10, y: 2.220446e-16, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}
