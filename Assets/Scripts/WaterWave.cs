@@ -4,6 +4,7 @@ using UnityEngine;
 // This script makes a wavy water mesh at runtime.
 // Needs MeshFilter and MeshRenderer on the same GameObject.
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
+[ExecuteAlways]
 public class WaterWave : MonoBehaviour
 {
     [Header("Mesh Settings")]
@@ -197,11 +198,9 @@ public class WaterWave : MonoBehaviour
         float pulseElapsed = Time.time - pulseStartTime;
         float pulseT = Mathf.Clamp01(pulseElapsed / pulseDuration);
 
-        // Pulse force fades from (pushForce + pulseImpulseForce) back to pushForce
         float currentForce = pushForce;
         if (pulseActive && pulseElapsed < pulseDuration)
         {
-            // Linear fade out
             currentForce = Mathf.Lerp(pushForce + pulseImpulseForce, pushForce, pulseT);
         }
         else
@@ -213,7 +212,7 @@ public class WaterWave : MonoBehaviour
         foreach (var col in colliders)
         {
             Rigidbody rb = col.attachedRigidbody;
-            if (rb != null)
+            if (rb != null && !rb.CompareTag("Boat")) // Ignore objects tagged as "Boat"
             {
                 Vector3 dir = (col.transform.position - epicenter);
                 dir.y = 0f;
@@ -221,7 +220,6 @@ public class WaterWave : MonoBehaviour
                 {
                     dir.Normalize();
                     Vector3 velocity = rb.linearVelocity;
-                    // Inverse mass scaling: lighter = more effect, heavier = less effect
                     float massScale = 1f / Mathf.Max(rb.mass, 0.01f);
                     Vector3 outwardVelocity = dir * currentForce * massScale;
                     rb.linearVelocity = new Vector3(outwardVelocity.x, velocity.y, outwardVelocity.z);
