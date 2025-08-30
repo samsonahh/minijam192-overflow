@@ -9,9 +9,6 @@ public enum GameState
     Playing,
     Paused,
     GameOver,
-    Win,
-    MainMenu,
-    Loading,
 }
 
 public class GameManager : Singleton<GameManager>
@@ -19,9 +16,14 @@ public class GameManager : Singleton<GameManager>
     public GameState CurrentState { get; private set; }
     public event Action<GameState> OnGameStateChanged = delegate { };
 
-    public void ChangeState(GameState newState)
+    private void Start()
     {
-        if(CurrentState == newState)
+        ChangeState(GameState.Playing, true);
+    }
+
+    public void ChangeState(GameState newState, bool force = false)
+    {
+        if(CurrentState == newState && !force)
             return;
 
         CurrentState = newState;
@@ -36,37 +38,17 @@ public class GameManager : Singleton<GameManager>
         {
             case GameState.Playing:
                 Time.timeScale = 1f;
+                UIManager.Instance.HideAllPanels();
                 InputManager.Instance.EnablePlayerActions();
                 break;
             case GameState.Paused:
                 Time.timeScale = 0f;
-                InputManager.Instance.EnableUIActions();
+                UIManager.Instance.ShowPanel(PanelType.Pause);
                 break;
             case GameState.GameOver:
                 Time.timeScale = 0f;
-                InputManager.Instance.EnableUIActions();
-                break;
-            case GameState.Win:
-                Time.timeScale = 0f;
-                InputManager.Instance.EnableUIActions();
-                break;
-            case GameState.MainMenu:
-                Time.timeScale = 0f;
-                InputManager.Instance.EnableUIActions();
-                break;
-            case GameState.Loading:
-                Time.timeScale = 1f;
-                InputManager.Instance.DisableAllActions();
+                UIManager.Instance.ShowPanel(PanelType.Results);
                 break;
         }
-    }
-
-    public IEnumerator SwitchScenes(SceneReference newScene, GameState afterState)
-    {
-        ChangeState(GameState.Loading);
-
-        yield return SceneManager.LoadSceneAsync(newScene.Name, LoadSceneMode.Single);
-
-        ChangeState(afterState);
     }
 }
