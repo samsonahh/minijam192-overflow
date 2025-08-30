@@ -4,7 +4,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float movementSpeed;
+    [SerializeField]float speed = 0f;
+
+    public float maxSpeed;
+    public float accelerationSpeed;
 
     Rigidbody _rb;
 
@@ -17,12 +20,27 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        Acceleration();
     }
 
     private void FixedUpdate()
     {
         Vector3 force = new Vector3(InputManager.Instance.MoveDirection.x, 0, InputManager.Instance.MoveDirection.y);
-        _rb.MovePosition(_rb.position + movementSpeed * Time.fixedDeltaTime * force);
+        _rb.MovePosition(_rb.position + speed * Time.fixedDeltaTime * force);
+    }
+
+    void Acceleration()
+    {
+        if (InputManager.Instance.MoveDirection.y != 0f && speed < maxSpeed)
+        {
+            speed += Time.deltaTime * accelerationSpeed;
+        } else
+        {
+            speed -= Time.deltaTime * accelerationSpeed;
+            if (InputManager.Instance.MoveDirection.y == 0f)
+            {
+                speed = 0f;
+            }
+        }
     }
 }
