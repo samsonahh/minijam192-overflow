@@ -15,20 +15,50 @@ public class WaterWave : MonoBehaviour
     public float frequency = 1f;   // how many waves fit in the mesh
     public float speed = 1f;       // how fast the waves move
 
+    [Header("Epicenter Settings")]
+    public Vector3 epicenter = Vector3.zero; // Set this in Inspector or code
+    public float pushRadius = 5f;
+    public float pushForce = 10f;
+
+    [Header("Gizmo Settings")]
+    public bool showGizmos = true; // Toggle for gizmo drawing
+
     private Mesh mesh;
     private Vector3[] baseVertices; // original flat mesh, so we can reset each frame
 
+    // Store previous values to detect changes
+    private int prevWidth;
+    private int prevLength;
+    private float prevScale;
+
     void Start()
     {
-        // Make a new mesh and assign it to the MeshFilter
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         CreateMesh();
+
+        prevWidth = width;
+        prevLength = length;
+        prevScale = scale;
     }
 
     void Update()
     {
+        // If any mesh setting changed, rebuild the mesh
+        if (width != prevWidth || length != prevLength || !Mathf.Approximately(scale, prevScale))
+        {
+            CreateMesh();
+            prevWidth = width;
+            prevLength = length;
+            prevScale = scale;
+        }
+
         AnimateWaves();
+    }
+
+    void FixedUpdate()
+    {
+        PushObjectsFromEpicenter();
     }
 
     // Makes a flat grid mesh using plane mesh Note: Only works for planes aligned with XZ plane
@@ -38,11 +68,10 @@ public class WaterWave : MonoBehaviour
         int[] triangles = new int[width * length * 6];
         Vector2[] uv = new Vector2[vertices.Length];
 
-        // These offsets make the mesh centered instead of starting at (0,0,0)
+        // Center the mesh
         float xOffset = (width * scale) * 0.5f;
         float zOffset = (length * scale) * 0.5f;
 
-        // Make all the vertices
         for (int z = 0, i = 0; z <= length; z++)
         {
             for (int x = 0; x <= width; x++, i++)
@@ -54,7 +83,6 @@ public class WaterWave : MonoBehaviour
             }
         }
 
-        // Make all the triangles (two per quad)
         int vert = 0;
         int tris = 0;
         for (int z = 0; z < length; z++)
@@ -74,12 +102,12 @@ public class WaterWave : MonoBehaviour
             vert++;
         }
 
+        mesh.Clear();
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.uv = uv;
         mesh.RecalculateNormals();
 
-        // Save the flat mesh for reference
         baseVertices = mesh.vertices;
     }
 
@@ -99,5 +127,74 @@ public class WaterWave : MonoBehaviour
 
         mesh.vertices = vertices;
         mesh.RecalculateNormals();
+    }
+
+    // Constantly sets rigidbodies' outward velocity from the epicenter while they're in the radius
+    void PushObjectsFromEpicenter()
+    {
+        Collider[] colliders = Physics.OverlapSphere(epicenter, pushRadius);
+        foreach (var col in colliders)
+        {
+            Rigidbody rb = col.attachedRigidbody;
+            if (rb != null)
+            {
+                Vector3 dir = (col.transform.position - epicenter);
+                dir.y = 0f; // Only push in XZ plane
+                if (dir.sqrMagnitude > 0.0001f)
+                {
+                    dir.Normalize();
+                    Vector3 velocity = rb.linearVelocity;
+                    // Set XZ velocity to a flat value outward, keep Y velocity for floating
+                    Vector3 outwardVelocity = dir * pushForce;
+                    rb.linearVelocity = new Vector3(outwardVelocity.x, velocity.y, outwardVelocity.z);
+                }
+            }
+        }
+    }
+
+    // Returns the water height at a given (x, z) world position
+    public float GetWaveHeightAtPosition(float x, float z)
+    {
+        // Convert world position to local position relative to the water mesh
+        Vector3 local = transform.InverseTransformPoint(new Vector3(x, 0, z));
+        // Use the same wave formula as AnimateWaves
+        return amplitude * Mathf.Sin(frequency * local.x + Time.time * speed) * Mathf.Cos(frequency * local.z + Time.time * speed) + transform.position.y;
+    }
+
+    void OnDrawGizmos()
+    {
+        if (!showGizmos) return;
+
+        // Draw the epicenter as a small red sphere (always visible)
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(epicenter, 0.15f);
+
+        // Draw the push radius as a wire sphere (cyan)
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(epicenter, pushRadius);
+
+        // Draw arrows (lines) radiating outward from the epicenter
+        Gizmos.color = Color.magenta;
+        int arrowCount = 32; // Number of arrows/lines to draw
+        float arrowLength = pushRadius;
+        float arrowHeadLength = 0.3f;
+        float arrowHeadAngle = 20f;
+
+        for (int i = 0; i < arrowCount; i++)
+        {
+            float angle = (360f / arrowCount) * i;
+            float rad = angle * Mathf.Deg2Rad;
+            Vector3 dir = new Vector3(Mathf.Cos(rad), 0, Mathf.Sin(rad));
+            Vector3 end = epicenter + dir * arrowLength;
+
+            // Draw main line
+            Gizmos.DrawLine(epicenter, end);
+
+            // Draw arrowhead
+            Vector3 right = Quaternion.Euler(0, arrowHeadAngle, 0) * -dir;
+            Vector3 left = Quaternion.Euler(0, -arrowHeadAngle, 0) * -dir;
+            Gizmos.DrawLine(end, end + right * arrowHeadLength);
+            Gizmos.DrawLine(end, end + left * arrowHeadLength);
+        }
     }
 }
