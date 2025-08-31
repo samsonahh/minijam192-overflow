@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 9175144225827821557}
   m_Layer: 0
   m_Name: TestFloat
-  m_TagString: Untagged
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -149,6 +149,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69490c931dc1ce14aa4f6f339f7f0cb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  water: {fileID: 0}
   floatStrength: 10
   offset: 0
+  floatPoints:
+  - {x: 1, y: 0, z: 1}
+  - {x: -1, y: 0, z: 1}
+  - {x: 1, y: 0, z: -1}
+  - {x: -1, y: 0, z: -1}
+  rotationSmooth: 2
