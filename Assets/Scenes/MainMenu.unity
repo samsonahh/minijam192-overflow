@@ -544,6 +544,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7404549897875611794, guid: b21abc34223a9e746a07e0c264f296a8, type: 3}
+      propertyPath: skipSplash
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8488900733064198525, guid: b21abc34223a9e746a07e0c264f296a8, type: 3}
       propertyPath: m_Name
       value: SplashScreen

@@ -5,7 +5,7 @@ using UnityEngine.Audio;
 public class AudioManager : Singleton<AudioManager>
 {
     [SerializeField] private AudioMixer audioMixer;
-    private const string VolumeParameter = "Volume";
+    private const string VolumeParameter = "MasterVolume";
 
     private const string OneShotNamePrefix = "OneShot";
     private const string LoopingNamePrefix = "Looping";

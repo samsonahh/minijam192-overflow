@@ -10,6 +10,7 @@ public class SplashScreen : MonoBehaviour
     [SerializeField] private Image splashImage;
 
     [Header("Config")]
+    [SerializeField] private bool skipSplash = false;
     [SerializeField] private float fadeInDuration = 1f;
     [SerializeField] private Ease fadeInEaseType = Ease.Linear;
     [SerializeField] private float showLogoDuration = 1f;
@@ -25,6 +26,12 @@ public class SplashScreen : MonoBehaviour
 
     private IEnumerator PlaySplashScreenCoroutine()
     {
+        if(skipSplash)
+        {
+            gameObject.SetActive(false);
+            yield break;
+        }
+
         backgroundImage.gameObject.SetActive(true);
 
         splashImage.color = new Color(1f, 1f, 1f, 0f); // clear white
