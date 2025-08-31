@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class StateMachine<TContext>
 {
@@ -19,6 +20,7 @@ public class StateMachine<TContext>
         CurrentState?.Exit();
         CurrentState = newState;
         CurrentState.Enter();
+        Debug.Log($"State changed to {newState.GetType().Name}");
 
         OnStateChanged.Invoke(newState);
     }

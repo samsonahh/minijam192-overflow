@@ -212,17 +212,17 @@ public class WaterWave : MonoBehaviour
         foreach (var col in colliders)
         {
             Rigidbody rb = col.attachedRigidbody;
-            if (rb == null)
+            if(rb == null)
                 continue;
 
-            if (rb.CompareTag("Boat")) // ignore boats
+            if(rb.CompareTag("Boat")) // ignore boats
                 continue;
 
             WaterFloat waterFloat = col.GetComponent<WaterFloat>();
             if (waterFloat == null)
                 continue;
 
-            if (!waterFloat.isInWater) // don't push if not in water
+            if (!waterFloat.IsInWater) // dont push if not in water
                 continue;
 
             Vector3 dir = (col.transform.position - epicenter);
