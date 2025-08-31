@@ -212,6 +212,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e5867ad1cdfe54a83d051074551e68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  freeLookCamera: {fileID: 1203782368}
+  orbitalFollow: {fileID: 1203782370}
+  mouseSensitivity: 0.565
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,7 +303,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -17.469849, y: 18.879568, z: 4.2380753}
+  m_LocalPosition: {x: -17.969849, y: 18.986626, z: -0.2990942}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -607,7 +610,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1203782369}
   - component: {fileID: 1203782368}
-  - component: {fileID: 1203782367}
+  - component: {fileID: 1203782370}
   m_Layer: 0
   m_Name: CinemachineCamera
   m_TagString: Untagged
@@ -615,32 +618,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1203782367
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1203782365}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 625c14eee3ad46c99df7c7c891ef668a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Damping: {x: 0.1, y: 0.5, z: 0.3}
-  ShoulderOffset: {x: 0.5, y: 2.5, z: 0}
-  VerticalArmLength: 0.4
-  CameraSide: 1
-  CameraDistance: 5
-  AvoidObstacles:
-    Enabled: 0
-    CollisionFilter:
-      serializedVersion: 2
-      m_Bits: 1
-    IgnoreTag: 
-    CameraRadius: 0.2
-    DampingIntoCollision: 0
-    DampingFromCollision: 0.5
 --- !u!114 &1203782368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -693,12 +670,75 @@ Transform:
   m_GameObject: {fileID: 1203782365}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -17.469849, y: 18.879568, z: 4.2380753}
+  m_LocalPosition: {x: -17.969849, y: 18.986626, z: -0.2990942}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1203782370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203782365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b5d7c088409d9a40b7b09aa707777f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetOffset: {x: 0, y: 0, z: 0}
+  TrackerSettings:
+    BindingMode: 4
+    PositionDamping: {x: 1, y: 1, z: 1}
+    AngularDampingMode: 0
+    RotationDamping: {x: 1, y: 1, z: 1}
+    QuaternionDamping: 1
+  OrbitStyle: 0
+  Radius: 10
+  Orbits:
+    Top:
+      Radius: 2
+      Height: 5
+    Center:
+      Radius: 4
+      Height: 2.25
+    Bottom:
+      Radius: 2.5
+      Height: 0.1
+    SplineCurvature: 0.5
+  RecenteringTarget: 2
+  HorizontalAxis:
+    Value: 0
+    Center: 0
+    Range: {x: -180, y: 180}
+    Wrap: 1
+    Recentering:
+      Enabled: 0
+      Wait: 1
+      Time: 2
+    Restrictions: 0
+  VerticalAxis:
+    Value: 17.5
+    Center: 17.5
+    Range: {x: -10, y: 45}
+    Wrap: 0
+    Recentering:
+      Enabled: 0
+      Wait: 1
+      Time: 2
+    Restrictions: 0
+  RadialAxis:
+    Value: 1
+    Center: 1
+    Range: {x: 1, y: 1}
+    Wrap: 0
+    Recentering:
+      Enabled: 0
+      Wait: 1
+      Time: 2
+    Restrictions: 0
 --- !u!1 &1432253927
 GameObject:
   m_ObjectHideFlags: 0
