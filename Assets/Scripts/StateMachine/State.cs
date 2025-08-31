@@ -1,13 +1,13 @@
 [System.Serializable]
 public abstract class State<TContext>
 {
-    public TContext Context { get; private set; }
-    public StateMachine<TContext> StateMachine { get; private set; }
+    private protected TContext context;
+    private protected StateMachine<TContext> stateMachine;
 
     public void Init(TContext context, StateMachine<TContext> stateMachine)
     {
-        Context = context;
-        StateMachine = stateMachine;
+        this.context = context;
+        this.stateMachine = stateMachine;
     }
 
     public abstract void Enter();

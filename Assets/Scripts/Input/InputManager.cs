@@ -85,7 +85,10 @@ public class InputManager : Singleton<InputManager>, IPlayerActions, IUIActions
     }
     public void OnPause(InputAction.CallbackContext context)
     {
-        if(GameManager.Instance.CurrentState != GameState.Playing)
+        if(GameManager.Instance == null)
+            return;
+
+        if (GameManager.Instance.CurrentState != GameState.Playing)
             return;
 
         if (context.performed)
@@ -100,7 +103,10 @@ public class InputManager : Singleton<InputManager>, IPlayerActions, IUIActions
     // UI Actions (no need to touch)
     public void OnUnPause(InputAction.CallbackContext context)
     {
-        if(GameManager.Instance.CurrentState != GameState.Paused)
+        if (GameManager.Instance == null)
+            return;
+
+        if (GameManager.Instance.CurrentState != GameState.Paused)
             return;
 
         if (context.performed)

@@ -1,10 +1,11 @@
+using Animancer;
 using UnityEngine;
 
 namespace Fisherman
 {
     public class FishermanController : MonoBehaviour
     {
-        [field: SerializeField] public Animator Animator { get; private set; }
+        [field: SerializeField] public AnimancerComponent Animator { get; private set; }
 
         public StateMachine<FishermanController> StateMachine { get; private set; }
 
