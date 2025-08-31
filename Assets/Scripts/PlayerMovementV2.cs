@@ -23,7 +23,6 @@ public class PlayerMovementV2 : MonoBehaviour
 
         if (input != Vector3.zero)
         {
-            // Only apply force if max speed hasn't been reached
             if (_rb.linearVelocity.magnitude < maxSpeed)
             {
                 _rb.AddForce(input.normalized * accelerationForce, ForceMode.Acceleration);
