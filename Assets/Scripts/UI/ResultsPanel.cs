@@ -1,9 +1,14 @@
 ﻿using Eflatun.SceneReference;
 using UnityEngine;
 
-public class ResultsPanel : MonoBehaviour
+public class ResultsPanel : UIPanel
 {
     [SerializeField] private SceneReference menuScene;
+
+    public override void Init()
+    {
+        
+    }
 
     public void Replay()
     {
