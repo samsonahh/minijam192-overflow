@@ -212,18 +212,28 @@ public class WaterWave : MonoBehaviour
         foreach (var col in colliders)
         {
             Rigidbody rb = col.attachedRigidbody;
-            if (rb != null && !rb.CompareTag("Boat")) // Ignore objects tagged as "Boat"
+            if(rb == null)
+                continue;
+
+            if(rb.CompareTag("Boat")) // ignore boats
+                continue;
+
+            WaterFloat waterFloat = col.GetComponent<WaterFloat>();
+            if (waterFloat == null)
+                continue;
+
+            if (!waterFloat.IsInWater) // dont push if not in water
+                continue;
+
+            Vector3 dir = (col.transform.position - epicenter);
+            dir.y = 0f;
+            if (dir.sqrMagnitude > 0.0001f)
             {
-                Vector3 dir = (col.transform.position - epicenter);
-                dir.y = 0f;
-                if (dir.sqrMagnitude > 0.0001f)
-                {
-                    dir.Normalize();
-                    Vector3 velocity = rb.linearVelocity;
-                    float massScale = 1f / Mathf.Max(rb.mass, 0.01f);
-                    Vector3 outwardVelocity = dir * currentForce * massScale;
-                    rb.linearVelocity = new Vector3(outwardVelocity.x, velocity.y, outwardVelocity.z);
-                }
+                dir.Normalize();
+                Vector3 velocity = rb.linearVelocity;
+                float massScale = 1f / Mathf.Max(rb.mass, 0.01f);
+                Vector3 outwardVelocity = dir * currentForce * massScale;
+                rb.linearVelocity = new Vector3(outwardVelocity.x, velocity.y, outwardVelocity.z);
             }
         }
     }

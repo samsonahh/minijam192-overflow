@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -7,19 +8,25 @@ public class WaterFloat : MonoBehaviour
     public float offset = 0f; // Offset if you want the object to float above the surface
 
     private Rigidbody rb;
-    private bool isInWater = false;
+    private WaterWave waterWave;
+    [field: SerializeField, ReadOnly] public bool IsInWater { get; private set; } = false;
 
-    void Awake() => rb = GetComponent<Rigidbody>();
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        waterWave = Object.FindAnyObjectByType<WaterWave>();
+    }
 
     void FixedUpdate()
     {
-        if (!isInWater) return;
+        if (!IsInWater) 
+            return;
 
-        var water = Object.FindAnyObjectByType<WaterWave>();
-        if (water == null) return;
+        if (waterWave == null) 
+            return;
 
         Vector3 pos = transform.position;
-        float waterHeight = water.GetWaveHeightAtPosition(pos.x, pos.z);
+        float waterHeight = waterWave.GetWaveHeightAtPosition(pos.x, pos.z);
 
         if (pos.y < waterHeight + offset)
         {
@@ -31,6 +38,6 @@ public class WaterFloat : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Water")) // Tag your water collider as "Water"
-            isInWater = true;
+            IsInWater = true;
     }
 }
