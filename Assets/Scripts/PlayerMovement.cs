@@ -21,12 +21,12 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         Acceleration();
-        Deacceleration();
     }
 
     private void FixedUpdate()
     {
         Vector3 force = new Vector3(InputManager.Instance.MoveDirection.x, 0, InputManager.Instance.MoveDirection.y);
+        Deacceleration(force);
         _rb.MovePosition(_rb.position + speed * Time.fixedDeltaTime * force);
     }
 
@@ -47,11 +47,12 @@ public class PlayerMovement : MonoBehaviour
         //}
     }
 
-    void Deacceleration()
+    void Deacceleration(Vector3 force)
     {
         if(InputManager.Instance.MoveDirection.y == 0f)
         {
             speed -= Time.deltaTime * accelerationSpeed;
+            _rb.AddForce(force, ForceMode.Acceleration);
         }
 
         if (speed <= 0f)
