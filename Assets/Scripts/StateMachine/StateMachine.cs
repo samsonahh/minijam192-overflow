@@ -12,15 +12,15 @@ public class StateMachine<TContext>
         Context = context;
     }
 
-    public void ChangeState(State<TContext> newState)
+    public void ChangeState(State<TContext> newState, bool force = false)
     {
-        if(CurrentState == newState) 
+        if(CurrentState == newState && !force) 
             return;
 
         CurrentState?.Exit();
         CurrentState = newState;
         CurrentState.Enter();
-        Debug.Log($"State changed to {newState.GetType().Name}");
+        // Debug.Log($"State changed to {newState.GetType().Name}");
 
         OnStateChanged.Invoke(newState);
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -53,6 +54,8 @@ public class WaterWave : MonoBehaviour
     }
     private readonly List<Pulse> pulses = new();
 
+    public event Action OnPulse = delegate { };
+
     void Awake()
     {
         Instance = this;
@@ -79,12 +82,6 @@ public class WaterWave : MonoBehaviour
             prevScale = scale;
         }
 
-        // Right mouse button triggers a pulse
-        if (Input.GetMouseButtonDown(1))
-        {
-            PulseFromEpicenter();
-        }
-
         AnimateWaves();
     }
 
@@ -104,6 +101,7 @@ public class WaterWave : MonoBehaviour
             origin = epicenter,
             startTime = Time.time
         });
+        OnPulse?.Invoke();
     }
 
     // Makes a flat grid mesh using plane mesh Note: Only works for planes aligned with XZ plane

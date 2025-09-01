@@ -138,8 +138,6 @@ MonoBehaviour:
     attackIntervalRange:
       Min: 0.75
       Max: 1.75
-    throwTrashWeight: 4
-    harpoonWeight: 1
   <ThrowTrashState>k__BackingField:
     clip:
       _FadeDuration: 0.25
@@ -164,25 +162,17 @@ MonoBehaviour:
       Min: 50
       Max: 70
     rotationSpeed: 15
-  <HarpoonState>k__BackingField:
+  <GetHitState>k__BackingField:
     clip:
       _FadeDuration: 0.25
       _Speed: 1
       _Events:
-        _NormalizedTimes:
-        - 0.4783981
-        - NaN
+        _NormalizedTimes: []
         _Callbacks: []
-        _Names:
-        - {fileID: 11400000, guid: f3c8cee482e6a6646af61f641f7c201a, type: 2}
-      _Clip: {fileID: 8363577474001477993, guid: dc767ecda47c6cf4f83f15e45981e21a, type: 3}
+        _Names: []
+      _Clip: {fileID: 7926796523407491146, guid: dc767ecda47c6cf4f83f15e45981e21a, type: 3}
       _NormalizedStartTime: NaN
-    clipSpeedRange:
-      Min: 0.9
-      Max: 1.8
-    harpoonEvent: {fileID: 11400000, guid: f3c8cee482e6a6646af61f641f7c201a, type: 2}
-    handTransform: {fileID: 4662347489318575918}
-    harpoonPrefab: {fileID: 3838533557871292277, guid: c067dee7e58734c47a3ae041a75d7138, type: 3}
+    speed: 2
   references:
     version: 2
     RefIds: []

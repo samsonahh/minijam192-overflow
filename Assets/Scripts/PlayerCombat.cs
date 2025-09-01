@@ -4,12 +4,19 @@ public class PlayerCombat: MonoBehaviour
 {
     public Transform attackPos;
     public float attackRange;
-    public LayerMask enemyLayer;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         InputManager.Instance.Attack += SharkAttack;
+    }
+
+    private void OnDestroy()
+    {
+        if (InputManager.Instance != null)
+        {
+            InputManager.Instance.Attack -= SharkAttack;
+        }
     }
 
     // Update is called once per frame
@@ -20,16 +27,21 @@ public class PlayerCombat: MonoBehaviour
 
     void SharkAttack()
     {
-        Collider[] enemies = Physics.OverlapSphere(attackPos.position, attackRange, enemyLayer);
+        Debug.Log("Attack");
 
-        if (enemies.Length > 0)
+        Collider[] enemies = Physics.OverlapSphere(attackPos.position, attackRange);
+        if (enemies == null)
+            return;
+
+        if (enemies.Length == 0)
+            return;
+
+        foreach(Collider enemy in enemies)
         {
-            Debug.Log(enemies.Length);
-            Debug.Log("Enemies Found");
-        } else
-        {
-            Debug.Log(enemies.Length);
-            Debug.Log("No Enemies Found");
+            if (enemy.TryGetComponent(out Health health))
+            {
+                health.TakeDamage(1);
+            }
         }
     }
 
