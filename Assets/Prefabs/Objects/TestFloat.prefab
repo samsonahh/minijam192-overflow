@@ -134,7 +134,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
 --- !u!114 &9175144225827821557
@@ -149,5 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69490c931dc1ce14aa4f6f339f7f0cb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floatStrength: 10
-  offset: 0
+  <IsInWater>k__BackingField: 0
+  touchWaterSnapSpeed: 10
+  bobAmplitude: 2
+  bobFrequency: 0.75

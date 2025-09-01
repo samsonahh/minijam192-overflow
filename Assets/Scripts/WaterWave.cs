@@ -247,6 +247,59 @@ public class WaterWave : MonoBehaviour
         return amplitude * Mathf.Sin(frequency * local.x + Time.time * speed) * Mathf.Cos(frequency * local.z + Time.time * speed) + transform.position.y;
     }
 
+    public float SampleMeshHeight(float x, float z)
+    {
+        if (mesh == null)
+            return transform.position.y;
+
+        Vector3[] vertices = mesh.vertices;
+
+        // Convert world to local
+        Vector3 localPoint = transform.InverseTransformPoint(new Vector3(x, 0f, z));
+
+        float cellSize = scale;
+
+        // Local grid coordinates
+        float gridX = (localPoint.x + (width * scale) * 0.5f) / cellSize;
+        float gridZ = (localPoint.z + (length * scale) * 0.5f) / cellSize;
+
+        // Floor indices
+        int x0 = Mathf.FloorToInt(gridX);
+        int z0 = Mathf.FloorToInt(gridZ);
+
+        // Clamp so we never exceed vertex array
+        x0 = Mathf.Clamp(x0, 0, width - 1);
+        z0 = Mathf.Clamp(z0, 0, length - 1);
+
+        int x1 = x0 + 1;
+        int z1 = z0 + 1;
+
+        // Vertex indices in mesh array
+        int idx00 = z0 * (width + 1) + x0;
+        int idx10 = z0 * (width + 1) + x1;
+        int idx01 = z1 * (width + 1) + x0;
+        int idx11 = z1 * (width + 1) + x1;
+
+        float h00 = vertices[idx00].y;
+        float h10 = vertices[idx10].y;
+        float h01 = vertices[idx01].y;
+        float h11 = vertices[idx11].y;
+
+        // Fractions inside the cell
+        float tx = gridX - x0;
+        float tz = gridZ - z0;
+
+        // Bilinear interpolation
+        float h0 = Mathf.Lerp(h00, h10, tx);
+        float h1 = Mathf.Lerp(h01, h11, tx);
+        float h = Mathf.Lerp(h0, h1, tz);
+
+        // Convert back to world
+        return transform.TransformPoint(new Vector3(0f, h, 0f)).y;
+    }
+
+
+
     void OnDrawGizmos()
     {
         if (!showGizmos) return;
