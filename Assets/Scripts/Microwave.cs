@@ -76,14 +76,14 @@ public class Microwave : MonoBehaviour
         }
         renderer.material.color = explosionColor;
 
-        // Optionally, disable collider on the visual sphere
+        
         Destroy(sphere.GetComponent<Collider>());
 
         // Animate scale
         sphere.transform.DOScale(explosionRadius * 2f, explosionVisualDuration)
             .SetEase(Ease.OutCubic);
 
-        // Optionally, fade out the color at the end
+
         renderer.material.DOFade(0f, explosionVisualDuration)
             .SetDelay(explosionVisualDuration * 0.5f);
 
@@ -91,7 +91,7 @@ public class Microwave : MonoBehaviour
         Destroy(sphere, explosionVisualDuration * 1.5f);
     }
 
-    // Optional: Reset color for testing
+
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))

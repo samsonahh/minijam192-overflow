@@ -13,25 +13,28 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable
     [SerializeField] private float stunSpeed = 50f;
     private float currentSpeed;
 
-    Rigidbody _rb;
+    private Rigidbody _rb;
 
+    private Vector2 inputMoveDirection;
     private Vector3 moveDirection;
 
     private float stunTimer;
     private Vector3 pushDirection;
 
-    // Slowness and Knockback variables from interfaces (mainly for controlling effects)
+    // Slowness and Knockback variables
     private float slownessTimer = 0f;
-    private float slownessMultiplier = 1f;
+    private float slownessPercent = 1f;
     private float knockbackTimer = 0f;
     private Vector3 knockbackDirection;
     private float knockbackForce;
 
+    private float originalMaxSpeed;
+
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
-
         waterWave.OnPulse += WaterWave_OnPulse;
+        originalMaxSpeed = maxSpeed;
     }
 
     private void OnDestroy()
@@ -42,7 +45,8 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable
 
     private void Update()
     {
-        moveDirection = Utils.GetCameraBasedMoveInput(Camera.main.transform, InputManager.Instance.MoveDirection);
+        inputMoveDirection = InputManager.Instance.MoveDirection;
+        moveDirection = Utils.GetCameraBasedMoveInput(Camera.main.transform, inputMoveDirection);
 
         if (stunTimer > 0)
         {
@@ -59,7 +63,7 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable
             slownessTimer -= Time.deltaTime;
             if (slownessTimer <= 0)
             {
-                slownessMultiplier = 1f;
+                slownessPercent = 1f;
                 slownessTimer = 0f;
             }
         }
@@ -91,21 +95,20 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable
         if (transform.position.y < height)
             _rb.useGravity = false;
 
+        float effectiveMaxSpeed = maxSpeed * slownessPercent;
+
         if (stunTimer == 0)
         {
             if (knockbackTimer > 0)
             {
-                // Apply knockback movement
                 _rb.linearVelocity = knockbackDirection * knockbackForce;
                 return;
             }
 
-            float effectiveAcceleration = acceleration * slownessMultiplier;
-
             if (moveDirection != Vector3.zero)
-                currentSpeed = Mathf.Clamp(currentSpeed + effectiveAcceleration * Time.fixedDeltaTime, 0, maxSpeed);
+                currentSpeed = Mathf.Clamp(currentSpeed + acceleration * Time.fixedDeltaTime, 0, effectiveMaxSpeed);
             else
-                currentSpeed = Mathf.Clamp(currentSpeed - effectiveAcceleration * Time.fixedDeltaTime, 0, maxSpeed);
+                currentSpeed = Mathf.Clamp(currentSpeed - acceleration * Time.fixedDeltaTime, 0, effectiveMaxSpeed);
 
             if (moveDirection != Vector3.zero)
                 _rb.MoveRotation(Quaternion.Lerp(_rb.rotation, Quaternion.LookRotation(moveDirection, Vector3.up), rotationSpeed * Time.fixedDeltaTime));
@@ -122,15 +125,15 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable
     private void WaterWave_OnPulse()
     {
         stunTimer = stunDuration;
-
         pushDirection = transform.position - boat.transform.position;
         pushDirection.y = 0f;
         pushDirection.Normalize();
     }
 
-    public void ApplySlowness(float slowMultiplier, float duration)
+    // ISlowable implementation
+    public void ApplySlowness(float maxSpeedPercent, float duration)
     {
-        slownessMultiplier = slowMultiplier;
+        slownessPercent = Mathf.Clamp01(maxSpeedPercent);
         slownessTimer = duration;
     }
 
@@ -138,6 +141,6 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable
     {
         knockbackDirection = direction.normalized;
         knockbackForce = force;
-        knockbackTimer = 0.2f; // Duration of knockback effect
+        knockbackTimer = 0.2f;
     }
 }
