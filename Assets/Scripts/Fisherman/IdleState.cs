@@ -8,8 +8,6 @@ namespace Fisherman
         [SerializeField] private AnimationClip clip;
 
         [SerializeField] private FloatRange attackIntervalRange = new FloatRange(1.5f, 3f);
-        [SerializeField] private int throwTrashWeight = 4;
-        [SerializeField] private int harpoonWeight = 1;
         private float attackTimer = 0f;
         private float currentAttackInterval;
 
@@ -31,7 +29,7 @@ namespace Fisherman
             attackTimer += Time.deltaTime;
             if(attackTimer > currentAttackInterval)
             {
-                stateMachine.ChangeState(GetRandomAttackState());
+                stateMachine.ChangeState(context.ThrowTrashState);
                 return;
             }
         }
@@ -39,13 +37,6 @@ namespace Fisherman
         public override void FixedUpdate()
         {
 
-        }
-
-        private State<FishermanController> GetRandomAttackState()
-        {
-            int totalWeight = throwTrashWeight + harpoonWeight;
-            int randomValue = Random.Range(0, totalWeight);
-            return randomValue < throwTrashWeight ? context.ThrowTrashState : context.HarpoonState;
         }
     }
 }

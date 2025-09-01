@@ -12,7 +12,6 @@ namespace Fisherman
         [field: Header("States")]
         [field: SerializeField] public IdleState IdleState { get; private set; } = new();
         [field: SerializeField] public ThrowTrashState ThrowTrashState { get; private set; } = new();
-        [field: SerializeField] public HarpoonState HarpoonState { get; private set; } = new();
 
         private void Awake()
         {
@@ -25,7 +24,6 @@ namespace Fisherman
 
             IdleState.Init(this, StateMachine);
             ThrowTrashState.Init(this, StateMachine);
-            HarpoonState.Init(this, StateMachine);
 
             StateMachine.ChangeState(IdleState);
         }
