@@ -9,8 +9,8 @@ public class Health : MonoBehaviour
     [field: SerializeField, ReadOnly] public float CurrentHealth { get; private set; }
     [SerializeField] private bool destroyOnDeath = false;
 
-    public event Action<float, float> OnHealthChanged; // before, current
-    public event Action OnDeath;
+    public event Action<float, float> OnHealthChanged = delegate { }; // before, current
+    public event Action OnDeath = delegate { };
 
     private bool isDead = false;
 
@@ -34,15 +34,6 @@ public class Health : MonoBehaviour
 
         if (CurrentHealth <= 0f)
             Die();
-    }
-
-    public void Heal(float amount)
-    {
-        if (isDead) 
-            return;
-
-        CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0f, MaxHealth);
-        OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
     }
 
     public void ResetHealth()

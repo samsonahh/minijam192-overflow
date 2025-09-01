@@ -4,12 +4,15 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class WaterFloat : MonoBehaviour
 {
-    public float floatStrength = 10f; // How strong the floating force is
-    public float offset = 0f; // Offset if you want the object to float above the surface
-
     private Rigidbody rb;
     private WaterWave waterWave;
     [field: SerializeField, ReadOnly] public bool IsInWater { get; private set; } = false;
+
+    [Header("Config")]
+    [SerializeField] private float touchWaterSnapSpeed = 10f;
+    [SerializeField] private float bobAmplitude = 2f;
+    [SerializeField] private float bobFrequency = 0.75f;
+    private float sinParameter;
 
     void Awake()
     {
@@ -19,25 +22,30 @@ public class WaterFloat : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!IsInWater) 
-            return;
-
         if (waterWave == null) 
             return;
 
+        rb.useGravity = true;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        
         Vector3 pos = transform.position;
-        float waterHeight = waterWave.GetWaveHeightAtPosition(pos.x, pos.z);
+        float waterHeight = waterWave.SampleMeshHeight(pos.x, pos.z);
+        float bobOffset = EvaluateBobOffset();
 
-        if (pos.y < waterHeight + offset)
+        Vector3 targetPosition = new Vector3(pos.x, waterHeight + bobOffset, pos.z);
+
+        if(pos.y < targetPosition.y)
         {
-            float force = (waterHeight + offset - pos.y) * floatStrength;
-            rb.AddForce(Vector3.up * force, ForceMode.Acceleration);
+            IsInWater = true;
+            rb.useGravity = false;
+            rb.interpolation = RigidbodyInterpolation.None;
+            rb.MovePosition(Vector3.Lerp(rb.position, targetPosition, touchWaterSnapSpeed * Time.fixedDeltaTime));
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    private float EvaluateBobOffset()
     {
-        if (other.CompareTag("Water")) // Tag your water collider as "Water"
-            IsInWater = true;
+        sinParameter += bobFrequency * Time.fixedDeltaTime;
+        return Mathf.Sin(sinParameter) * bobAmplitude;
     }
 }
