@@ -293,7 +293,7 @@ Transform:
   m_GameObject: {fileID: 55303613}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -17.969849, y: 18.986626, z: -0.2990942}
+  m_LocalPosition: {x: -17.969849, y: 17.919567, z: 8.048075}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -348,11 +348,11 @@ MonoBehaviour:
   TargetOffset: {x: 0, y: 0, z: 0}
   TrackerSettings:
     BindingMode: 4
-    PositionDamping: {x: 1, y: 1, z: 1}
+    PositionDamping: {x: 0.5, y: 0.5, z: 0.5}
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
-  OrbitStyle: 0
+  OrbitStyle: 1
   Radius: 10
   Orbits:
     Top:
@@ -364,7 +364,7 @@ MonoBehaviour:
     Bottom:
       Radius: 2.5
       Height: 0.1
-    SplineCurvature: 0.5
+    SplineCurvature: 0
   RecenteringTarget: 2
   HorizontalAxis:
     Value: 0
@@ -541,7 +541,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -17.969849, y: 18.986626, z: -0.2990942}
+  m_LocalPosition: {x: -17.969849, y: 17.919567, z: 8.048075}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -924,10 +924,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7932015825070232360, guid: 753e2b1fa1f08a840826b3cd63b7e573, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 7932015825070232360, guid: 753e2b1fa1f08a840826b3cd63b7e573, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.19
+      objectReference: {fileID: 0}
     - target: {fileID: 8674245431468604158, guid: 753e2b1fa1f08a840826b3cd63b7e573, type: 3}
       propertyPath: orbitalFollow
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 55303621}
     - target: {fileID: 8674245431468604158, guid: 753e2b1fa1f08a840826b3cd63b7e573, type: 3}
       propertyPath: freeLookCamera
       value: 
