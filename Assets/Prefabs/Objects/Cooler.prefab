@@ -22,15 +22,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: db2ce2ca578df2d45968b1d06da8a494, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -21.89
+      value: -57.250202
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: db2ce2ca578df2d45968b1d06da8a494, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 9.95
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: db2ce2ca578df2d45968b1d06da8a494, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 14.78
+      value: 41.30013
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: db2ce2ca578df2d45968b1d06da8a494, type: 3}
       propertyPath: m_LocalRotation.w
@@ -74,7 +74,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: db2ce2ca578df2d45968b1d06da8a494, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 895887641759419967}
+      addedObject: {fileID: -2006960549028084607}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: db2ce2ca578df2d45968b1d06da8a494, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7718555779382570378}
@@ -90,7 +90,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: db2ce2ca578df2d45968b1d06da8a494, type: 3}
   m_PrefabInstance: {fileID: 5282767779866302064}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &895887641759419967
+--- !u!114 &-2006960549028084607
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -99,9 +99,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5012858914329488161}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6dfae7f0befe01a429d45ece1a8e3d20, type: 3}
+  m_Script: {fileID: 11500000, guid: c161a2a45d50ee341b5ce7a4811ebecc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slowMultiplier: 0.5
+  slowDuration: 2
   collisionClip: {fileID: 8300000, guid: d9183b8c86ba62044bb2cee48ce15161, type: 3}
 --- !u!54 &7718555779382570378
 Rigidbody:

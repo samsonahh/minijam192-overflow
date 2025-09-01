@@ -2,7 +2,7 @@ using Animancer;
 using System;
 using UnityEngine;
 
-public class PlayerMovementV2 : MonoBehaviour
+public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable
 {
     [SerializeField] private WaterWave waterWave;
     [SerializeField] private GameObject boat;
@@ -19,6 +19,13 @@ public class PlayerMovementV2 : MonoBehaviour
 
     private float stunTimer;
     private Vector3 pushDirection;
+
+    // Slowness and Knockback variables from interfaces (mainly for controlling effects)
+    private float slownessTimer = 0f;
+    private float slownessMultiplier = 1f;
+    private float knockbackTimer = 0f;
+    private Vector3 knockbackDirection;
+    private float knockbackForce;
 
     void Start()
     {
@@ -37,13 +44,35 @@ public class PlayerMovementV2 : MonoBehaviour
     {
         moveDirection = Utils.GetCameraBasedMoveInput(Camera.main.transform, InputManager.Instance.MoveDirection);
 
-        if(stunTimer > 0)
+        if (stunTimer > 0)
         {
             stunTimer -= Time.deltaTime;
-            if(stunTimer < 0)
+            if (stunTimer < 0)
                 stunTimer = 0;
 
             currentSpeed = 0f;
+        }
+
+        // slowness timer
+        if (slownessTimer > 0)
+        {
+            slownessTimer -= Time.deltaTime;
+            if (slownessTimer <= 0)
+            {
+                slownessMultiplier = 1f;
+                slownessTimer = 0f;
+            }
+        }
+
+        // knockback timer
+        if (knockbackTimer > 0)
+        {
+            knockbackTimer -= Time.deltaTime;
+            if (knockbackTimer <= 0)
+            {
+                knockbackTimer = 0f;
+                _rb.linearVelocity = Vector3.zero;
+            }
         }
     }
 
@@ -59,15 +88,24 @@ public class PlayerMovementV2 : MonoBehaviour
 
         _rb.useGravity = true;
         float height = waterWave.SampleMeshHeight(transform.position.x, transform.position.z);
-        if(transform.position.y < height)
+        if (transform.position.y < height)
             _rb.useGravity = false;
 
-        if(stunTimer == 0)
+        if (stunTimer == 0)
         {
+            if (knockbackTimer > 0)
+            {
+                // Apply knockback movement
+                _rb.linearVelocity = knockbackDirection * knockbackForce;
+                return;
+            }
+
+            float effectiveAcceleration = acceleration * slownessMultiplier;
+
             if (moveDirection != Vector3.zero)
-                currentSpeed = Mathf.Clamp(currentSpeed + acceleration * Time.fixedDeltaTime, 0, maxSpeed);
+                currentSpeed = Mathf.Clamp(currentSpeed + effectiveAcceleration * Time.fixedDeltaTime, 0, maxSpeed);
             else
-                currentSpeed = Mathf.Clamp(currentSpeed - acceleration * Time.fixedDeltaTime, 0, maxSpeed);
+                currentSpeed = Mathf.Clamp(currentSpeed - effectiveAcceleration * Time.fixedDeltaTime, 0, maxSpeed);
 
             if (moveDirection != Vector3.zero)
                 _rb.MoveRotation(Quaternion.Lerp(_rb.rotation, Quaternion.LookRotation(moveDirection, Vector3.up), rotationSpeed * Time.fixedDeltaTime));
@@ -88,5 +126,18 @@ public class PlayerMovementV2 : MonoBehaviour
         pushDirection = transform.position - boat.transform.position;
         pushDirection.y = 0f;
         pushDirection.Normalize();
+    }
+
+    public void ApplySlowness(float slowMultiplier, float duration)
+    {
+        slownessMultiplier = slowMultiplier;
+        slownessTimer = duration;
+    }
+
+    public void ApplyKnockback(Vector3 direction, float force)
+    {
+        knockbackDirection = direction.normalized;
+        knockbackForce = force;
+        knockbackTimer = 0.2f; // Duration of knockback effect
     }
 }
