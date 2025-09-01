@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 25, y: 25, z: 25}
+  m_LocalScale: {x: 75, y: 5, z: 75}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -42,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3035276339882318566}
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 0}
 --- !u!23 &2348795387182806740
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -103,14 +103,14 @@ MonoBehaviour:
   width: 20
   length: 20
   scale: 1
-  amplitude: 0.5
-  frequency: 1
+  amplitude: 2
+  frequency: 12
   speed: 0.5
   epicenter: {x: 0, y: 0, z: 0}
-  pushRadius: 120
+  pushRadius: 300
   pushForce: 2
   showGizmos: 0
-  pulseAmplitude: 1
+  pulseAmplitude: 8
   pulseSpeed: 5
   pulseWidth: 1
   pulseImpulseForce: 200
@@ -134,5 +134,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 10, y: 2.220446e-16, z: 10}
+  m_Size: {x: 20, y: 2.220446e-16, z: 20}
   m_Center: {x: 0, y: 0, z: 0}

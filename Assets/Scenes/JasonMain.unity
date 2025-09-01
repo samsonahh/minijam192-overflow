@@ -893,14 +893,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 7932015825070232360, guid: 753e2b1fa1f08a840826b3cd63b7e573, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.31
-      objectReference: {fileID: 0}
-    - target: {fileID: 7932015825070232360, guid: 753e2b1fa1f08a840826b3cd63b7e573, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -2.19
-      objectReference: {fileID: 0}
     - target: {fileID: 8674245431468604158, guid: 753e2b1fa1f08a840826b3cd63b7e573, type: 3}
       propertyPath: orbitalFollow
       value: 
@@ -909,10 +901,6 @@ PrefabInstance:
       propertyPath: freeLookCamera
       value: 
       objectReference: {fileID: 55303618}
-    - target: {fileID: 8674245431468604158, guid: 753e2b1fa1f08a840826b3cd63b7e573, type: 3}
-      propertyPath: mouseSensitivity
-      value: 0.115
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

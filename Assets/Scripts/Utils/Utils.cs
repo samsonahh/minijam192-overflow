@@ -14,4 +14,25 @@ public static class Utils
         string format = "F" + decimalPlaces;
         return value.ToString(format);
     }
+
+    /// <summary>
+    /// Calculates the movement input relative to the camera's orientation.
+    /// The return result is normalized.
+    /// </summary>
+    public static Vector3 GetCameraBasedMoveInput(Transform cameraTransform, Vector2 moveInput)
+    {
+        if (cameraTransform == null)
+            return moveInput;
+
+        Vector3 forward = cameraTransform.forward;
+        Vector3 right = cameraTransform.right;
+
+        forward.y = 0; // Ignore vertical component
+        right.y = 0; // Ignore vertical component
+
+        forward.Normalize();
+        right.Normalize();
+
+        return (forward * moveInput.y + right * moveInput.x).normalized;
+    }
 }

@@ -2,14 +2,24 @@ using UnityEngine;
 
 public class PlayerMovementV2 : MonoBehaviour
 {
-    [SerializeField] float maxSpeed;
-    [SerializeField] float accelerationForce;
+    [SerializeField] private WaterWave waterWave;
+    [SerializeField] private float maxSpeed = 10f;
+    [SerializeField] private float acceleration = 10f;
+    [SerializeField] private float rotationSpeed = 15f;
+    private float currentSpeed;
 
     Rigidbody _rb;
+
+    private Vector3 moveDirection;
 
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
+    }
+
+    private void Update()
+    {
+        moveDirection = Utils.GetCameraBasedMoveInput(Camera.main.transform, InputManager.Instance.MoveDirection);
     }
 
     void FixedUpdate()
@@ -19,27 +29,22 @@ public class PlayerMovementV2 : MonoBehaviour
 
     void Move()
     {
-        Vector3 input = new Vector3(InputManager.Instance.MoveDirection.x, 0f, InputManager.Instance.MoveDirection.y);
+        if (waterWave == null)
+            return;
 
-        if (input != Vector3.zero)
-        {
-            if (_rb.linearVelocity.magnitude < maxSpeed)
-            {
-                _rb.AddForce(input.normalized * accelerationForce, ForceMode.Acceleration);
-            }
-        }
+        _rb.useGravity = true;
+        float height = waterWave.SampleMeshHeight(transform.position.x, transform.position.z);
+        if(transform.position.y < height)
+            _rb.useGravity = false;
+
+        if(moveDirection != Vector3.zero)
+            currentSpeed = Mathf.Clamp(currentSpeed + acceleration * Time.fixedDeltaTime, 0, maxSpeed);
         else
-        {
-            ApplyFriction();
-        }
-    }
+            currentSpeed = Mathf.Clamp(currentSpeed - acceleration * Time.fixedDeltaTime, 0, maxSpeed);
 
-    void ApplyFriction()
-    {
-        // Apply opposing force to slow down naturally
-        _rb.linearVelocity = Vector3.Lerp(_rb.linearVelocity, Vector3.zero, 0.1f);
+        if(moveDirection != Vector3.zero)
+            _rb.MoveRotation(Quaternion.Lerp(_rb.rotation, Quaternion.LookRotation(moveDirection, Vector3.up), rotationSpeed * Time.fixedDeltaTime));
+        
+        _rb.MovePosition(new Vector3(_rb.position.x, height, _rb.position.z) + transform.forward * currentSpeed * Time.fixedDeltaTime);
     }
-
-    public void SetMaxSpeed(float speed) { maxSpeed = speed; }
-    public void SetAccelerationForce(float force) { accelerationForce = force; }
 }
