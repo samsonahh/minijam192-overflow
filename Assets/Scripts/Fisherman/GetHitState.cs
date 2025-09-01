@@ -8,9 +8,9 @@ namespace Fisherman
     {
         [SerializeField] private ClipTransition clip;
         [SerializeField] private float speed = 2f;
+        [SerializeField] private float duration = 2f;
 
         private float timer;
-        private float duration;
 
         public override void Enter()
         {
@@ -18,7 +18,6 @@ namespace Fisherman
             context.Animator.Play(clip, 0.1f);
 
             timer = 0f;
-            duration = clip.Length / speed;
 
             GameObject.FindAnyObjectByType<WaterWave>().PulseFromEpicenter();
         }

@@ -19,6 +19,7 @@ namespace Fisherman
         private void Awake()
         {
             health.OnHealthChanged += Health_OnHealthChanged;
+            health.OnDeath += Health_OnDeath;
 
             SetupStateMachine();
         }
@@ -37,6 +38,7 @@ namespace Fisherman
         private void OnDestroy()
         {
             health.OnHealthChanged -= Health_OnHealthChanged;
+            health.OnDeath -= Health_OnDeath;
 
             StateMachine.Destroy();
         }
@@ -55,6 +57,11 @@ namespace Fisherman
         {
             if(afterHealth < beforeHealth)
                 StateMachine.ChangeState(GetHitState, true);
+        }
+
+        private void Health_OnDeath()
+        {
+            // Die stuff here
         }
     }
 }
