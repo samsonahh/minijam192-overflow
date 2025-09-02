@@ -32,6 +32,7 @@ public class WaterWave : MonoBehaviour
     public float pulseWidth = 2f;
     public float pulseImpulseForce = 10f; // Extra force during pulse
     public float pulseDuration = 1.5f;    // How long the pulse effect lasts
+    public AudioClip pulseSound;
 
     private Mesh mesh;
     private Vector3[] baseVertices;
@@ -102,6 +103,7 @@ public class WaterWave : MonoBehaviour
             startTime = Time.time
         });
         OnPulse?.Invoke();
+        AudioManager.Instance.PlayOneShot(pulseSound);
     }
 
     // Makes a flat grid mesh using plane mesh Note: Only works for planes aligned with XZ plane
