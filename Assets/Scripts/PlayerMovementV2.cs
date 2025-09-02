@@ -2,7 +2,7 @@ using Animancer;
 using System;
 using UnityEngine;
 
-public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable
+public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable, ISlip
 {
     [SerializeField] private WaterWave waterWave;
     [SerializeField] private GameObject boat;
@@ -30,6 +30,10 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable
 
     private float originalMaxSpeed;
 
+    // Slip state
+    private bool isSlipped = false;
+    private float slipTimer = 0f;
+
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
@@ -48,13 +52,47 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable
         inputMoveDirection = InputManager.Instance.MoveDirection;
         moveDirection = Utils.GetCameraBasedMoveInput(Camera.main.transform, inputMoveDirection);
 
+        // Handle slip timer
+        if (slipTimer > 0)
+        {
+            slipTimer -= Time.deltaTime;
+            if (slipTimer <= 0)
+            {
+                slipTimer = 0f;
+                if (isSlipped)
+                {
+                    // Restore upright Z rotation only, keep Y as is
+                    var rot = transform.rotation.eulerAngles;
+                    rot.z = 0f;
+                    transform.rotation = Quaternion.Euler(rot);
+                    isSlipped = false;
+                }
+            }
+        }
+
+        // If slipped, force Z=180 every frame (but do not touch Y or X)
+        if (isSlipped)
+        {
+            var rot = transform.rotation.eulerAngles;
+            if (Mathf.Abs(Mathf.DeltaAngle(rot.z, 180f)) > 0.01f)
+            {
+                rot.z = 180f;
+                transform.rotation = Quaternion.Euler(rot);
+            }
+            // Set speed to 0 while slipped (covers both normal and stun)
+            currentSpeed = 0f;
+        }
+
+        // Handle stun timer
         if (stunTimer > 0)
         {
             stunTimer -= Time.deltaTime;
             if (stunTimer < 0)
                 stunTimer = 0;
 
-            currentSpeed = 0f;
+            // If slipped, currentSpeed is already set to 0 above
+            if (!isSlipped)
+                currentSpeed = 0f;
         }
 
         // slowness timer
@@ -142,5 +180,17 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable
         knockbackDirection = direction.normalized;
         knockbackForce = force;
         knockbackTimer = 0.2f;
+    }
+
+    // ISlip implementation
+    public void Slip(float duration)
+    {
+        // Set upside down and mark as slipped
+        var rot = transform.rotation.eulerAngles;
+        rot.z = 180f;
+        transform.rotation = Quaternion.Euler(rot);
+
+        isSlipped = true;
+        slipTimer = duration;
     }
 }
