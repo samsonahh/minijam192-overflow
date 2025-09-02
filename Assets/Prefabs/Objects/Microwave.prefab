@@ -135,10 +135,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionRadius: 8.08
   explosionOffset: {x: -1.65, y: -2.84, z: 0}
-  explosionColor: {r: 1, g: 0, b: 0, a: 1}
+  explosionColor: {r: 1, g: 0.8980392, b: 0, a: 0.39215687}
   explosionVisualDuration: 0.5
   explosionClip: {fileID: 8300000, guid: e042bb44ed08fa04692c803b30c55382, type: 3}
-  explosionMaterial: {fileID: 0}
+  explosionMaterial: {fileID: 2100000, guid: b8244435df2cb7c408234ec5abdde844, type: 2}
 --- !u!135 &2761619414849379490
 SphereCollider:
   m_ObjectHideFlags: 0
