@@ -34,11 +34,29 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable, ISlip
     private bool isSlipped = false;
     private float slipTimer = 0f;
 
+    // Visualizer fields
+    [Header("Slowness Visualizer")]
+    [SerializeField] private Renderer targetRenderer; // Assign your player mesh renderer here
+    [SerializeField] private float slownessFadeDuration = 0.2f;
+    private Material _slownessMatInstance;
+    private Color _originalColor;
+    private bool _isSlownessVisualActive = false;
+    private Coroutine _slownessCoroutine;
+
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
         waterWave.OnPulse += WaterWave_OnPulse;
         originalMaxSpeed = maxSpeed;
+
+        if (targetRenderer == null)
+            targetRenderer = GetComponentInChildren<Renderer>();
+
+        if (targetRenderer != null)
+        {
+            _slownessMatInstance = targetRenderer.material = new Material(targetRenderer.material);
+            _originalColor = _slownessMatInstance.color;
+        }
     }
 
     private void OnDestroy()
@@ -64,7 +82,6 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable, ISlip
                 slipTimer = 0f;
                 if (isSlipped)
                 {
-                    // Restore upright Z rotation only, keep Y as is
                     var rot = transform.rotation.eulerAngles;
                     rot.z = 0f;
                     transform.rotation = Quaternion.Euler(rot);
@@ -74,7 +91,6 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable, ISlip
             }
         }
 
-        // If slipped, force Z=180 every frame (but do not touch Y or X)
         if (isSlipped)
         {
             var rot = transform.rotation.eulerAngles;
@@ -83,7 +99,6 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable, ISlip
                 rot.z = 180f;
                 transform.rotation = Quaternion.Euler(rot);
             }
-            // Set speed to 0 while slipped (covers both normal and stun)
             currentSpeed = 0f;
         }
 
@@ -96,8 +111,6 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable, ISlip
                 stunTimer = 0;
                 _rb.linearVelocity = Vector3.zero;
             }
-
-            // If slipped, currentSpeed is already set to 0 above
             if (!isSlipped)
                 currentSpeed = 0f;
         }
@@ -110,6 +123,13 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable, ISlip
             {
                 slownessPercent = 1f;
                 slownessTimer = 0f;
+                if (_isSlownessVisualActive)
+                {
+                    if (_slownessCoroutine != null)
+                        StopCoroutine(_slownessCoroutine);
+                    _slownessCoroutine = StartCoroutine(LerpSlownessColor(_slownessMatInstance.color, _originalColor, slownessFadeDuration));
+                    _isSlownessVisualActive = false;
+                }
             }
         }
     }
@@ -163,23 +183,54 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable, ISlip
     {
         slownessPercent = Mathf.Clamp01(maxSpeedPercent);
         slownessTimer = duration;
+
+        // Start visual effect
+        if (targetRenderer != null && _slownessMatInstance != null)
+        {
+            Color transparentBlue = new Color(0.2f, 0.5f, 1f, 0.5f); // semi-transparent blue
+            if (_slownessCoroutine != null)
+                StopCoroutine(_slownessCoroutine);
+            _slownessCoroutine = StartCoroutine(LerpSlownessColor(_slownessMatInstance.color, transparentBlue, slownessFadeDuration));
+            _isSlownessVisualActive = true;
+        }
     }
 
     public void ApplyKnockback(Vector3 direction, float force)
     {
         stunTimer = 0.2f;
         pushDirection = direction.normalized;
+
+        // Apply knockback force directly to the Rigidbody
+        if (_rb != null)
+        {
+            _rb.linearVelocity = Vector3.zero; // Reset current velocity for consistent knockback
+            _rb.AddForce(direction.normalized * force, ForceMode.VelocityChange);
+        }
     }
 
     // ISlip implementation
     public void Slip(float duration)
     {
-        // Set upside down and mark as slipped
         var rot = transform.rotation.eulerAngles;
         rot.z = 180f;
         transform.rotation = Quaternion.Euler(rot);
 
         isSlipped = true;
         slipTimer = duration;
+    }
+
+    // Coroutine to lerp color/alpha
+    private System.Collections.IEnumerator LerpSlownessColor(Color from, Color to, float duration)
+    {
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            if (_slownessMatInstance != null)
+                _slownessMatInstance.color = Color.Lerp(from, to, t / duration);
+            yield return null;
+        }
+        if (_slownessMatInstance != null)
+            _slownessMatInstance.color = to;
     }
 }

@@ -14,6 +14,7 @@ namespace Fisherman
         [SerializeField] private Transform handTransform;
         [SerializeField] private FloatRange throwForceRange = new FloatRange(5f, 10f);
         [SerializeField] private float rotationSpeed = 15f;
+        [SerializeField] private AudioClip throwClip;
 
         private float timer;
         private float duration;
@@ -62,6 +63,9 @@ namespace Fisherman
             
             float randomThrowForce = throwForceRange.RandomValue();
             trashRigidbody.AddForce(randomThrowForce * randomThrowDirection, ForceMode.Impulse);
+
+            if (throwClip != null)
+                AudioManager.Instance.PlayOneShot(throwClip);
         }
 
         private GameObject GetTrashPrefab() => trashPrefabs[Random.Range(0, trashPrefabs.Count)];

@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 public class Cooler : MonoBehaviour
 {
@@ -9,6 +10,20 @@ public class Cooler : MonoBehaviour
     public float slowRadius = 3f;
     public Vector3 slowOffset = Vector3.zero;
     public AudioClip collisionClip;
+
+    [Header("Squish & Squash Effect")]
+    public GameObject targetObject; // Assign in Inspector
+    public float squishScaleY = 0.5f;
+    public float squashScaleXZ = 1.3f;
+    public float squishDuration = 0.12f;
+
+    private Vector3 _originalScale;
+
+    private void Awake()
+    {
+        if (targetObject != null)
+            _originalScale = targetObject.transform.localScale;
+    }
 
     void Update()
     {
@@ -35,7 +50,27 @@ public class Cooler : MonoBehaviour
         {
             if (collisionClip != null)
                 AudioManager.Instance.PlayOneShot(collisionClip);
+
+            SquishAndSquash();
         }
+    }
+
+    private void SquishAndSquash()
+    {
+        if (targetObject == null)
+            return;
+
+        var t = targetObject.transform;
+        t.DOKill();
+        Vector3 squishScale = new Vector3(squashScaleXZ, squishScaleY, squashScaleXZ);
+
+        t.DOScale(squishScale, squishDuration)
+            .SetEase(Ease.OutQuad)
+            .OnComplete(() =>
+            {
+                t.DOScale(_originalScale, squishDuration)
+                    .SetEase(Ease.OutBack);
+            });
     }
 
     private void OnDrawGizmosSelected()

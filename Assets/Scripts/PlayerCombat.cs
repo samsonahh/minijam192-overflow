@@ -1,5 +1,6 @@
 using Animancer;
 using UnityEngine;
+using DG.Tweening; // Make sure DOTween is imported
 
 public class PlayerCombat: MonoBehaviour
 {
@@ -9,6 +10,12 @@ public class PlayerCombat: MonoBehaviour
     [SerializeField] private AnimancerComponent animator;
     [SerializeField] private AnimationClip swimClip;
     [SerializeField] private ClipTransition biteClip;
+    [SerializeField] private AudioClip sharkBiteClip;
+
+    [Header("Attack Visual Effect")]
+    public Transform targetToInflate; // Assign in Inspector
+    public float inflateScale = 1.3f;
+    public float inflateDuration = 0.15f;
 
     private float timer;
 
@@ -53,8 +60,24 @@ public class PlayerCombat: MonoBehaviour
 
     public void Attack()
     {
+        if (sharkBiteClip != null)
+            AudioManager.Instance.PlayOneShot(sharkBiteClip);
+
         Debug.Log("Attack");
-        // InstantiateTemporarySphere(attackPos.position, attackRange, 1f, new Color(1f, 0, 0, 0.2f));
+
+        // Inflate effect on the target object every attack
+        if (targetToInflate != null)
+        {
+            targetToInflate.DOKill();
+            Vector3 originalScale = targetToInflate.localScale;
+            targetToInflate.DOScale(originalScale * inflateScale, inflateDuration)
+                .SetEase(Ease.OutBack)
+                .OnComplete(() =>
+                {
+                    targetToInflate.DOScale(originalScale, inflateDuration)
+                        .SetEase(Ease.InBack);
+                });
+        }
 
         Collider[] enemies = Physics.OverlapSphere(attackPos.position, attackRange, LayerMask.GetMask("Enemy"));
         if (enemies == null)

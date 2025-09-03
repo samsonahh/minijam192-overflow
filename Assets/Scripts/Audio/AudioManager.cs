@@ -55,14 +55,17 @@ public class AudioManager : Singleton<AudioManager>
             Destroy(source.gameObject, duration.Value);
     }
 
-    private AudioSource InstantiateSource(string name, bool use3D)
+    public AudioSource InstantiateSource(string name, bool use3D)
     {
         GameObject newSourceObject = new GameObject(name);
         AudioSource source = newSourceObject.AddComponent<AudioSource>();
         source.outputAudioMixerGroup = audioMixer.FindMatchingGroups("Master")[0];
 
-        if(use3D)
+        if (use3D)
+        {
             source.spatialBlend = 1f; // 3d sound
+            source.minDistance = 5f;  // Set minimum distance for 3D audio
+        }
 
         return source;
     }
