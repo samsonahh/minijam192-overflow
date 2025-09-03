@@ -5,10 +5,18 @@ using UnityEngine.Audio;
 public class AudioManager : Singleton<AudioManager>
 {
     [SerializeField] private AudioMixer audioMixer;
+    [SerializeField] private AudioClip bgm;
+    [SerializeField] private AudioClip oceanWaves;
     private const string VolumeParameter = "MasterVolume";
 
     private const string OneShotNamePrefix = "OneShot";
     private const string LoopingNamePrefix = "Looping";
+
+    private void Start()
+    {
+        PlayLooping(bgm, null, null, 0.3f);
+        PlayLooping(oceanWaves, null, null, 0.6f);
+    }
 
     public void PlayOneShot(AudioClip clip, Vector3? position = null, float volume = 1f, float pitch = 1f)
     {
@@ -32,8 +40,10 @@ public class AudioManager : Singleton<AudioManager>
             return;
 
         AudioSource source = InstantiateSource($"{LoopingNamePrefix}_{clip.name}", parent != null);
-        if(parent != null)
+        if (parent != null)
             source.transform.SetParent(parent);
+        else
+            source.transform.SetParent(transform);
 
         source.clip = clip;
         source.volume = volume;

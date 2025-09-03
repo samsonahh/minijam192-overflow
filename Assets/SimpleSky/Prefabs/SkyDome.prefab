@@ -48,7 +48,7 @@ MonoBehaviour:
   sun: {fileID: 4283953152307542624}
   moon: {fileID: 768629231308618348}
   stars: {fileID: 2277586316634254923}
-  dayLengthInSeconds: 20
+  dayLengthInSeconds: 60
   axisTilt: 23.5
   targetMaterial: {fileID: 2100000, guid: e68f77e240a7f8643b5cc4253dc37516, type: 2}
 --- !u!1 &2429317925612240919

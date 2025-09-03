@@ -49,6 +49,9 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable, ISlip
 
     private void Update()
     {
+        if (InputManager.Instance == null)
+            return;
+
         inputMoveDirection = InputManager.Instance.MoveDirection;
         moveDirection = Utils.GetCameraBasedMoveInput(Camera.main.transform, inputMoveDirection);
 

@@ -115,6 +115,7 @@ MonoBehaviour:
   pulseWidth: 1
   pulseImpulseForce: 200
   pulseDuration: 1.5
+  pulseSound: {fileID: 8300000, guid: b763ac6818be15a4dada91dce2bf4987, type: 3}
 --- !u!65 &3276330755315956554
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -44,5 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c0b95e3cda686f4fbd3aa2c6afa7111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  persistAcrossScenes: 1
   audioMixer: {fileID: 24100000, guid: 691ccfb1611cbb34d8eeb01b31983a1e, type: 2}
+  bgm: {fileID: 8300000, guid: 29e8fe7db51809c47a7d9c7f1bb471e9, type: 3}
+  oceanWaves: {fileID: 8300000, guid: 9418cdf980764164f94148c8cfd7b04d, type: 3}

@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 6110091405468978742}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.45, z: 2.34}
+  m_LocalPosition: {x: 0, y: -0.62, z: 4.14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 1838963010070810337}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackPos: {fileID: 8761930456366995353}
-  attackRange: 2.62
+  attackRange: 5
   animator: {fileID: 1838963010070810337}
   swimClip: {fileID: -6442114436364795165, guid: a7f78aef2b1d25441b34089806d2d225, type: 3}
   biteClip:
@@ -109,17 +109,33 @@ MonoBehaviour:
     _Speed: 1
     _Events:
       _NormalizedTimes:
-      - 0.99271846
+      - 0.9781553
       - NaN
-      _Callbacks: []
-      _Names:
-      - {fileID: 11400000, guid: f3c8cee482e6a6646af61f641f7c201a, type: 2}
+      _Callbacks:
+      - rid: 6731474136953520209
+      _Names: []
     _Clip: {fileID: 7009339532132316760, guid: a7f78aef2b1d25441b34089806d2d225, type: 3}
     _NormalizedStartTime: NaN
-  biteEvent: {fileID: 11400000, guid: f3c8cee482e6a6646af61f641f7c201a, type: 2}
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 6731474136953520209
+      type: {class: UnityEvent, ns: Animancer, asm: Kybernetik.Animancer}
+      data:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 2025402559845609537}
+            m_TargetAssemblyTypeName: PlayerCombat, Assembly-CSharp
+            m_MethodName: Attack
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
 --- !u!65 &1575745957876979882
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -151,7 +167,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 2
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}

@@ -9,7 +9,6 @@ public class PlayerCombat: MonoBehaviour
     [SerializeField] private AnimancerComponent animator;
     [SerializeField] private AnimationClip swimClip;
     [SerializeField] private ClipTransition biteClip;
-    [SerializeField] private StringAsset biteEvent;
 
     private float timer;
 
@@ -18,7 +17,6 @@ public class PlayerCombat: MonoBehaviour
     {
         InputManager.Instance.Attack += SharkAttack;
 
-        biteClip.Events.SetCallback(biteEvent, Attack);
         animator.Play(swimClip, 0.1f);
     }
 
@@ -46,12 +44,18 @@ public class PlayerCombat: MonoBehaviour
 
     void SharkAttack()
     {
+        if(timer > 0)
+            return;
+
         animator.Play(biteClip, 0.1f);
         timer = biteClip.Length;
     }
 
-    private void Attack()
+    public void Attack()
     {
+        Debug.Log("Attack");
+        // InstantiateTemporarySphere(attackPos.position, attackRange, 1f, new Color(1f, 0, 0, 0.2f));
+
         Collider[] enemies = Physics.OverlapSphere(attackPos.position, attackRange, LayerMask.GetMask("Enemy"));
         if (enemies == null)
             return;
@@ -73,5 +77,59 @@ public class PlayerCombat: MonoBehaviour
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(attackPos.position, attackRange);
+    }
+
+    /// <summary>
+    /// Instantiates a temporary sphere GameObject with the specified center, radius, expire duration, and color.
+    /// The sphere is created as a primitive sphere with a Collider set as a trigger.
+    /// The sphere's material is set to be transparent using the Universal Render Pipeline/Unlit shader.
+    /// The sphere is destroyed after the specified expire duration.
+    /// </summary>
+    /// <param name="center">The center position of the sphere.</param>
+    /// <param name="radius">The radius of the sphere.</param>
+    /// <param name="expireDuration">The duration in seconds before the sphere is destroyed.</param>
+    /// <param name="color">The color of the sphere.</param>
+    public static GameObject InstantiateTemporarySphere(Vector3 center, float radius, float expireDuration, UnityEngine.Color color)
+    {
+        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        sphere.GetComponent<Collider>().enabled = false;
+        sphere.name = "Temporary Sphere";
+        sphere.transform.position = center;
+        sphere.transform.localScale = radius * 2f * Vector3.one;
+
+        Renderer sphereRenderer = sphere.GetComponent<Renderer>();
+        sphereRenderer.material = GetTransparentMaterial();
+        sphereRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        sphereRenderer.material.color = color;
+        GameObject.Destroy(sphere, expireDuration);
+
+        return sphere;
+    }
+
+    /// <summary>
+    /// Generates a transparent material.
+    /// </summary>
+    /// <returns>The transparent material.</returns>
+    public static Material GetTransparentMaterial()
+    {
+        Material transparentMaterial = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
+
+        // Change Surface Type to Transparent
+        transparentMaterial.SetFloat("_Surface", 1); // 1 = Transparent, 0 = Opaque
+
+        // Enable required shader keywords
+        transparentMaterial.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+        transparentMaterial.DisableKeyword("_SURFACE_TYPE_OPAQUE");
+
+        // Set rendering mode for transparency
+        transparentMaterial.SetOverrideTag("RenderType", "Transparent");
+        transparentMaterial.SetInt("_ZWrite", 0); // Disable ZWrite for transparency
+        transparentMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        transparentMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+
+        // Apply the changes to the material
+        transparentMaterial.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+
+        return transparentMaterial;
     }
 }
