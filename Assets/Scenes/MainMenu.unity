@@ -149,16 +149,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 571104500}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7432295625216059789}
+  m_Father: {fileID: 232311980}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -41}
+  m_AnchoredPosition: {x: 0, y: -160}
   m_SizeDelta: {x: 2376.922, y: 1304.711}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &571104502
@@ -490,7 +490,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 8.299999}
+  m_AnchoredPosition: {x: 0, y: -110.7}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1805238357
@@ -948,6 +948,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4460682028552261207, guid: c02cbeec512a91846af4c8160b2a9560, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -286
+      objectReference: {fileID: 0}
     - target: {fileID: 4659051218036643771, guid: c02cbeec512a91846af4c8160b2a9560, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -979,19 +983,14 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 1667198069561353646, guid: c02cbeec512a91846af4c8160b2a9560, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 571104501}
     - targetCorrespondingSourceObject: {fileID: 7977876338258997737, guid: c02cbeec512a91846af4c8160b2a9560, type: 3}
       insertIndex: 2
+      addedObject: {fileID: 571104501}
+    - targetCorrespondingSourceObject: {fileID: 7977876338258997737, guid: c02cbeec512a91846af4c8160b2a9560, type: 3}
+      insertIndex: 3
       addedObject: {fileID: 1805238356}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c02cbeec512a91846af4c8160b2a9560, type: 3}
---- !u!224 &7432295625216059789 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 1667198069561353646, guid: c02cbeec512a91846af4c8160b2a9560, type: 3}
-  m_PrefabInstance: {fileID: 7432295625216059788}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7432295625216059793 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5928049359173819173, guid: c02cbeec512a91846af4c8160b2a9560, type: 3}

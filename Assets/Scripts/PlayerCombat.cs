@@ -52,7 +52,7 @@ public class PlayerCombat: MonoBehaviour
 
     private void Attack()
     {
-        Collider[] enemies = Physics.OverlapSphere(attackPos.position, attackRange);
+        Collider[] enemies = Physics.OverlapSphere(attackPos.position, attackRange, LayerMask.GetMask("Enemy"));
         if (enemies == null)
             return;
 
@@ -61,6 +61,7 @@ public class PlayerCombat: MonoBehaviour
 
         foreach (Collider enemy in enemies)
         {
+            Debug.Log("Hit " + enemy.name);
             if (enemy.TryGetComponent(out Health health))
             {
                 health.TakeDamage(1);

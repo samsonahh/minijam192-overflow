@@ -66,6 +66,7 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable, ISlip
                     rot.z = 0f;
                     transform.rotation = Quaternion.Euler(rot);
                     isSlipped = false;
+                    _rb.linearVelocity = Vector3.zero;
                 }
             }
         }
@@ -88,7 +89,10 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable, ISlip
         {
             stunTimer -= Time.deltaTime;
             if (stunTimer < 0)
+            {
                 stunTimer = 0;
+                _rb.linearVelocity = Vector3.zero;
+            }
 
             // If slipped, currentSpeed is already set to 0 above
             if (!isSlipped)
@@ -103,17 +107,6 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable, ISlip
             {
                 slownessPercent = 1f;
                 slownessTimer = 0f;
-            }
-        }
-
-        // knockback timer
-        if (knockbackTimer > 0)
-        {
-            knockbackTimer -= Time.deltaTime;
-            if (knockbackTimer <= 0)
-            {
-                knockbackTimer = 0f;
-                _rb.linearVelocity = Vector3.zero;
             }
         }
     }
@@ -137,12 +130,6 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable, ISlip
 
         if (stunTimer == 0)
         {
-            if (knockbackTimer > 0)
-            {
-                _rb.linearVelocity = knockbackDirection * knockbackForce;
-                return;
-            }
-
             if (moveDirection != Vector3.zero)
                 currentSpeed = Mathf.Clamp(currentSpeed + acceleration * Time.fixedDeltaTime, 0, effectiveMaxSpeed);
             else
@@ -177,9 +164,8 @@ public class PlayerMovementV2 : MonoBehaviour, ISlowable, IKnockbackable, ISlip
 
     public void ApplyKnockback(Vector3 direction, float force)
     {
-        knockbackDirection = direction.normalized;
-        knockbackForce = force;
-        knockbackTimer = 0.2f;
+        stunTimer = 0.2f;
+        pushDirection = direction.normalized;
     }
 
     // ISlip implementation

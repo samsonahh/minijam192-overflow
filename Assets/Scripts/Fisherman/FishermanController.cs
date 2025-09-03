@@ -62,6 +62,7 @@ namespace Fisherman
         private void Health_OnDeath()
         {
             // Die stuff here
+            GameManager.Instance.ChangeState(GameState.GameOver);
         }
     }
 }
